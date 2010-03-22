@@ -6,15 +6,13 @@
 class Controller
 
   attr_writer :fontListView, :fontSampleView
-  attr_accessor :fonts
+  attr_accessor :fonts, :textView
   
   def awakeFromNib
-    
     @fonts = []
+
     @fontListView.setDataSource self
     @fontListView.reloadData
-    
-    @dummytext = "This is some dummy text"
     
     NSNotificationCenter.defaultCenter.addObserver self,
       selector:'fontSetChanged:',
@@ -22,28 +20,19 @@ class Controller
       object: nil
     
     createFontList
+    createSampleView
   end
   
   def createFontList
   
-    nameEnum = NSFontManager.new.availableFonts
-    
-    nameEnum.each do |name|
-      theDict = {}
-      font = NSFont.fontWithName(name, size:12)
-      
-      if font.displayName
-        theDict["name"] = font.displayName
-      else
-        theDict["name"] = font.fontName
-      end
-    
-      #theDict["gly"] = font.numberOfGlyphs.to_s
-      #theDict["mono"] = font.isFixedPitch ? "YES" : "NO"
-
-      @fonts << theDict
+    all_fonts = NSFontManager.new.availableFonts
+    all_fonts.each do |f|
+      font_dict = {}
+      font = FontData.new(f)
+      font_dict["name"] = font.name
+      @fonts << font_dict
     end
-    
+   
     @fontListView.reloadData
   end
   
@@ -63,8 +52,16 @@ class Controller
   
   # Font sample part
   
-  def textView(text)
-    @dummytext
+  def createSampleView
+    sample = "The quick brown fox jumps over the lazy dog?!"
+    ind = @fontListView.clickedRow
+    fontname = @fonts[ind]["name"]
+    @fontSampleView.setFont NSFont.fontWithName(fontname, size:24)
+    @fontSampleView.setStringValue sample
+  end
+  
+  def viewItem(sender)
+
   end
 
 end
