@@ -48,21 +48,17 @@ class Controller
   end
   
   def tableViewAction(sender)
-    sample_en = "The quick brown fox jumps over the lazy dog?!"
-    sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
-    fontname = @fonts[@fontListView.selectedRow]["name"]
-    @fontSampleView.setFont NSFont.fontWithName(fontname, size:24)
-    @fontSampleView.setStringValue sample_en
+    createSampleView
   end
   
   # Font sample part
   
   private
 
-  def createSampleView(findex)
+  def createSampleView
     sample_en = "The quick brown fox jumps over the lazy dog?!"
     sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
-    fontname = @fonts[findex]
+    fontname = @fonts[@fontListView.selectedRow]["name"]
     @fontSampleView.setFont NSFont.fontWithName(fontname, size:24)
     @fontSampleView.setStringValue sample_en
   end
