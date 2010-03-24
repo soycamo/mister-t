@@ -268,6 +268,7 @@
 							<array>
 								<string>29B97314FDCFA39411CA2CEA</string>
 								<string>29B97317FDCFA39411CA2CEA</string>
+								<string>2BFA9DA510CDF852007972A1</string>
 								<string>089C165CFE840E0CC02AAC07</string>
 								<string>19C28FACFE9D520D11CA2CBB</string>
 								<string>1C37FABC05509CD000000102</string>
@@ -300,7 +301,7 @@
 							<real>186</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>84 148 798 626 0 0 1280 778 </string>
+						<string>41 152 798 626 0 0 1280 778 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -330,7 +331,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>358501D41156FC6F00A6A5F7</string>
+										<string>358502981159D87E00A6A5F7</string>
 										<key>history</key>
 										<array>
 											<string>358501441156EF7700A6A5F7</string>
@@ -365,7 +366,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {590, 441}}</string>
 								<key>RubberWindowFrame</key>
-								<string>84 148 798 626 0 0 1280 778 </string>
+								<string>41 152 798 626 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -385,7 +386,7 @@
 								<key>Frame</key>
 								<string>{{0, 446}, {590, 139}}</string>
 								<key>RubberWindowFrame</key>
-								<string>84 148 798 626 0 0 1280 778 </string>
+								<string>41 152 798 626 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -553,7 +554,7 @@
 		<string>/Users/camo/Projects/mister t/mister t.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>84 148 798 626 0 0 1280 778 </string>
+	<string>41 152 798 626 0 0 1280 778 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
@@ -899,7 +900,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {650, 209}}</string>
 								<key>RubberWindowFrame</key>
-								<string>605 299 650 250 0 0 1280 778 </string>
+								<string>623 528 650 250 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXDebugCLIModule</string>
@@ -928,7 +929,7 @@
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.consoleV3</string>
 			<key>WindowString</key>
-			<string>605 299 650 250 0 0 1280 778 </string>
+			<string>623 528 650 250 0 0 1280 778 </string>
 			<key>WindowToolGUID</key>
 			<string>1C78EAAD065D492600B07095</string>
 			<key>WindowToolIsVisible</key>

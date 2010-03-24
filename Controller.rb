@@ -6,21 +6,20 @@
 class Controller
 
   attr_writer :fontListView, :fontSampleView
-  attr_accessor :fonts, :textView
+  attr_accessor :fonts
   
   def awakeFromNib
     @fonts = []
 
     @fontListView.setDataSource self
     @fontListView.reloadData
-    
+
     NSNotificationCenter.defaultCenter.addObserver self,
       selector:'fontSetChanged:',
       name:NSFontSetChangedNotification, 
       object: nil
     
     createFontList
-    createSampleView
   end
   
   def createFontList
@@ -40,8 +39,6 @@ class Controller
     @fontListView.reloadData
   end
   
-  # TABLESSSS
-  
   def numberOfRowsInTableView(view)
     @fonts ? @fonts.size : 0
   end
@@ -50,18 +47,24 @@ class Controller
     @fonts[index]["name"]
   end
   
-  # Font sample part
-  
-  def createSampleView
-    sample = "The quick brown fox jumps over the lazy dog?!"
-    ind = @fontListView.clickedRow
-    fontname = @fonts[ind]["name"]
+  def tableViewAction(sender)
+    sample_en = "The quick brown fox jumps over the lazy dog?!"
+    sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
+    fontname = @fonts[@fontListView.selectedRow]["name"]
     @fontSampleView.setFont NSFont.fontWithName(fontname, size:24)
-    @fontSampleView.setStringValue sample
+    @fontSampleView.setStringValue sample_en
   end
   
-  def viewItem(sender)
+  # Font sample part
+  
+  private
 
+  def createSampleView(findex)
+    sample_en = "The quick brown fox jumps over the lazy dog?!"
+    sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
+    fontname = @fonts[findex]
+    @fontSampleView.setFont NSFont.fontWithName(fontname, size:24)
+    @fontSampleView.setStringValue sample_en
   end
 
 end

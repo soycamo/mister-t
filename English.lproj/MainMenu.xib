@@ -9,7 +9,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="29"/>
-			<integer value="395"/>
+			<integer value="394"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -923,7 +923,7 @@
 													<int key="NSsFlags">1</int>
 													<reference key="NSTarget" ref="990032902"/>
 													<string key="NSAction">_doScroller:</string>
-													<double key="NSCurValue">1.000000e+00</double>
+													<double key="NSCurValue">9.906542e-01</double>
 													<double key="NSPercent">9.321357e-01</double>
 												</object>
 												<object class="NSClipView" id="869790448">
@@ -968,7 +968,7 @@
 											<reference key="NSSuperview" ref="808028750"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSTextFieldCell" key="NSCell" id="128493273">
-												<int key="NSCellFlags">-1809711615</int>
+												<int key="NSCellFlags">-2078147071</int>
 												<int key="NSCellFlags2">272629760</int>
 												<string key="NSContents"/>
 												<reference key="NSSupport" ref="163182272"/>
@@ -1415,11 +1415,11 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">viewItem:</string>
+						<string key="label">tableViewAction:</string>
 						<reference key="source" ref="19191868"/>
-						<reference key="destination" ref="77688410"/>
+						<reference key="destination" ref="925629404"/>
 					</object>
-					<int key="connectionID">423</int>
+					<int key="connectionID">424</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2525,8 +2525,8 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{270, 21}, {698, 433}}</string>
-					<string>{{270, 21}, {698, 433}}</string>
+					<string>{{249, 65}, {698, 433}}</string>
+					<string>{{249, 65}, {698, 433}}</string>
 					<reference ref="9"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<boolean value="YES"/>
@@ -2607,7 +2607,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">423</int>
+			<int key="maxID">424</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2616,7 +2616,7 @@
 					<string key="className">Controller</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">viewItem:</string>
+						<string key="NS.key.0">tableViewAction:</string>
 						<string key="NS.object.0">id</string>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -2626,11 +2626,9 @@
 							<string>fontListView</string>
 							<string>fontSampleView</string>
 							<string>fonts</string>
-							<string>textView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
