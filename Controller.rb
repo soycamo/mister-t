@@ -5,33 +5,48 @@
 
 class Controller
 
-  attr_writer :fontListView, :fontSampleView
+  require 'yaml'
+
+  attr_writer :fontListView, :fontSampleView, :tokenView
   attr_accessor :fonts
   
   def awakeFromNib
-    @fonts = []
 
-    @fontListView.setDataSource self
-    @fontListView.reloadData
-
+    retrieve_fonts
+    
     NSNotificationCenter.defaultCenter.addObserver self,
       selector:'fontSetChanged:',
       name:NSFontSetChangedNotification, 
       object: nil
-    
-    createFontList
   end
   
-  def createFontList
+  def yaml_file
+    yaml_file = File.expand_path('~/mister-t.yml')
+    unless File.exist?(yaml_file)
+      File.open(yaml_file, 'w+'){|f| f << @fonts.to_yaml}
+    end
+    yaml_file
+  end
   
+  def retrieve_fonts
+    @fonts = YAML.load_file(yaml_file) || []
+    if @fonts == []
+      createFontList
+    end
+    @fontListView.setDataSource self
+    @fontListView.reloadData
+  end
+  
+  
+  def createFontList
     all_fonts = NSFontManager.new.availableFonts
     all_fonts.each do |f|
       font_dict = {}
       font = FontData.new(f)
       font_dict["name"] = font.name
+      font_dict["tags"] = font.tags
       @fonts << font_dict
     end
-   
     @fontListView.reloadData
   end
   
@@ -49,9 +64,20 @@ class Controller
   
   def tableViewAction(sender)
     createSampleView
+    if @fonts[@fontListView.selectedRow]["tags"]
+      @tokenView.setStringValue @fonts[@fontListView.selectedRow]["tags"].join(', ')
+    end
   end
   
-  # Font sample part
+  def addTag(sender)
+    @fonts[@fontListView.selectedRow]["tags"] = @tokenView.stringValue.split(', ')
+    save_tags
+  end
+  
+  def save_tags
+    File.open(yaml_file, 'w'){|f| f << @fonts.to_yaml}
+    tokenView.reloadData
+  end
   
   private
 
