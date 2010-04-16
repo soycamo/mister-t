@@ -9,7 +9,7 @@
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="29"/>
-			<integer value="372"/>
+			<integer value="378"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -816,7 +816,7 @@
 						<object class="NSTextField" id="367027390">
 							<reference key="NSNextResponder" ref="439893737"/>
 							<int key="NSvFlags">274</int>
-							<string key="NSFrame">{{257, 168}, {390, 83}}</string>
+							<string key="NSFrame">{{257, 156}, {390, 95}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="125948747">
@@ -951,7 +951,6 @@
 													</object>
 													<int key="NSResizingMask">3</int>
 													<bool key="NSIsResizeable">YES</bool>
-													<bool key="NSIsEditable">YES</bool>
 													<reference key="NSTableView" ref="925629404"/>
 												</object>
 											</object>
@@ -1398,14 +1397,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">tableViewAction:</string>
-						<reference key="source" ref="19191868"/>
-						<reference key="destination" ref="925629404"/>
-					</object>
-					<int key="connectionID">424</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">addTag:</string>
 						<reference key="source" ref="19191868"/>
 						<reference key="destination" ref="859810224"/>
@@ -1413,12 +1404,20 @@
 					<int key="connectionID">442</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">tableViewAction:</string>
+						<reference key="source" ref="19191868"/>
+						<reference key="destination" ref="925629404"/>
+					</object>
+					<int key="connectionID">453</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">tokenView</string>
 						<reference key="source" ref="19191868"/>
 						<reference key="destination" ref="367027390"/>
 					</object>
-					<int key="connectionID">449</int>
+					<int key="connectionID">454</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2511,8 +2510,8 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{52, 179}, {667, 433}}</string>
-					<string>{{52, 179}, {667, 433}}</string>
+					<string>{{132, 198}, {667, 433}}</string>
+					<string>{{132, 198}, {667, 433}}</string>
 					<reference ref="9"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<boolean value="YES"/>
@@ -2592,7 +2591,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">449</int>
+			<int key="maxID">454</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2606,9 +2605,11 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>addTag:</string>
 							<string>tableViewAction:</string>
+							<string>windowWillClose:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>

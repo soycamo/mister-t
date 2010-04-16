@@ -14,10 +14,14 @@ class Controller
 
     retrieve_fonts
     
-    NSNotificationCenter.defaultCenter.addObserver self,
-      selector:'fontSetChanged:',
-      name:NSFontSetChangedNotification, 
-      object: nil
+#    NSNotificationCenter.defaultCenter.addObserver self,
+#      selector:'fontSetChanged:',
+#      name:NSFontSetChangedNotification, 
+#      object: nil
+  end
+  
+  def windowWillClose(sender)
+   exit
   end
   
   def yaml_file
@@ -50,9 +54,9 @@ class Controller
     @fontListView.reloadData
   end
   
-  def fontSetChanged(notification)
-    @fontListView.reloadData
-  end
+#  def fontSetChanged(notification)
+#    @fontListView.reloadData
+#  end
   
   def numberOfRowsInTableView(view)
     @fonts ? @fonts.size : 0
@@ -63,10 +67,13 @@ class Controller
   end
   
   def tableViewAction(sender)
-    createSampleView
-    if @fonts[@fontListView.selectedRow]["tags"]
-      @tokenView.setStringValue @fonts[@fontListView.selectedRow]["tags"].join(', ')
-    end
+    show_tags
+    create_sample_view
+  end
+  
+  def show_tags
+    @tokenView.setStringValue @fonts[@fontListView.selectedRow]["tags"].join(', ')
+    #@tokenView.reloadData
   end
   
   def addTag(sender)
@@ -76,12 +83,12 @@ class Controller
   
   def save_tags
     File.open(yaml_file, 'w'){|f| f << @fonts.to_yaml}
-    tokenView.reloadData
+    #@tokenView.reloadData
   end
   
   private
 
-  def createSampleView
+  def create_sample_view
     sample_en = "The quick brown fox jumps over the lazy dog?!"
     sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
     fontname = @fonts[@fontListView.selectedRow]["name"]
