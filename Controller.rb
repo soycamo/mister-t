@@ -14,13 +14,14 @@ class Controller
 
     retrieve_fonts
     
-#    NSNotificationCenter.defaultCenter.addObserver self,
-#      selector:'fontSetChanged:',
-#      name:NSFontSetChangedNotification, 
-#      object: nil
+    NSNotificationCenter.defaultCenter.addObserver self,
+      selector:'tableViewSelectionDidChange:',
+      name:NSTableViewSelectionDidChangeNotification,
+      object: nil
+    
   end
   
-  def windowWillClose(sender)
+  def windowWillClose(sender)  # Doesn't work.
    exit
   end
   
@@ -39,6 +40,7 @@ class Controller
     end
     @fontListView.setDataSource self
     @fontListView.reloadData
+    @fontListView.selectRowIndexes(NSIndexSet.indexSetWithIndex(0), byExtendingSelection:false) 
   end
   
   
@@ -66,14 +68,18 @@ class Controller
     @fonts[index]["name"]
   end
   
-  def tableViewAction(sender)
-    show_tags
+  def tableViewSelectionDidChange(notification)
     create_sample_view
+    show_tags @fonts[@fontListView.selectedRow]["tags"]
   end
   
-  def show_tags
-    @tokenView.setStringValue @fonts[@fontListView.selectedRow]["tags"].join(', ')
-    #@tokenView.reloadData
+#  def tableViewAction(sender)
+#    show_tags
+#    create_sample_view
+#  end
+  
+  def show_tags(tags)
+    @tokenView.setStringValue tags.join(', ')
   end
   
   def addTag(sender)
@@ -83,7 +89,6 @@ class Controller
   
   def save_tags
     File.open(yaml_file, 'w'){|f| f << @fonts.to_yaml}
-    #@tokenView.reloadData
   end
   
   private
