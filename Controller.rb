@@ -3,9 +3,9 @@
 #
 # Created by Cameron Adamez on 3/18/10.
 
-class Controller
+require 'yaml'
 
-  require 'yaml'
+class Controller
 
   attr_writer :fontListView, :fontSampleView, :tokenView
   attr_accessor :fonts
@@ -45,11 +45,11 @@ class Controller
   
   
   def createFontList
-    all_fonts = NSFontManager.new.availableFonts
+    all_fonts = NSFontManager.new.availableFontFamilies.sort
     all_fonts.each do |f|
       font_dict = {}
       font = FontData.new(f)
-      font_dict["name"] = font.name
+      font_dict["name"] = f
       font_dict["tags"] = font.tags
       @fonts << font_dict
     end

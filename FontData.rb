@@ -11,11 +11,11 @@ class FontData
 
   def initialize(font_name)
     font = NSFont.fontWithName(font_name, size:12)
-    if font.displayName
-        @name = font.displayName
-      else
-        @name = font.fontName
-      end
+    #if font.displayName
+    #    @name = font.displayName
+    #  else
+    #    @name = font.fontName
+    #  end
     @gly = font.numberOfGlyphs.to_i
     @mono = font.isFixedPitch
     @tags = []
