@@ -14,15 +14,19 @@ class Controller
 
     retrieve_fonts
     
-    NSNotificationCenter.defaultCenter.addObserver self,
+    create_sample_view
+    show_tags @fonts[@fontListView.selectedRow]["tags"]
+    
+    ncenter = NSNotificationCenter.defaultCenter
+    ncenter.addObserver self,
       selector:'tableViewSelectionDidChange:',
       name:NSTableViewSelectionDidChangeNotification,
       object: nil
+    ncenter.addObserver self,
+      selector:'textDidEndEditing:',
+      name:NSTextDidEndEditingNotification,
+      object: nil
     
-  end
-  
-  def windowWillClose(sender)  # Doesn't work.
-   exit
   end
   
   def yaml_file
@@ -73,25 +77,39 @@ class Controller
     show_tags @fonts[@fontListView.selectedRow]["tags"]
   end
   
-#  def tableViewAction(sender)
-#    show_tags
-#    create_sample_view
-#  end
-  
-  def show_tags(tags)
-    @tokenView.setStringValue tags.join(', ')
-  end
-  
-  def addTag(sender)
-    @fonts[@fontListView.selectedRow]["tags"] = @tokenView.stringValue.split(', ')
+  def textDidEndEditing(notification)
     save_tags
   end
   
-  def save_tags
+  def show_tags(tags)
+    unless tags === ''
+      @tokenView.setStringValue tags.join(', ')
+    else
+      @tokenView.setStringValue ''
+    end
+  end
+  
+  def addTag(sender)
+    save_tags
+  end
+  
+  def clearTag(sender)
+    clear_tags
+  end
+
+  private
+  
+  def clear_tags
+    @tokenView.setStringValue ''
+    @fonts[@fontListView.selectedRow]["tags"] = ''
     File.open(yaml_file, 'w'){|f| f << @fonts.to_yaml}
   end
   
-  private
+  def save_tags
+    @fonts[@fontListView.selectedRow]["tags"] = @tokenView.stringValue.split(', ')
+    File.open(yaml_file, 'w'){|f| f << @fonts.to_yaml}
+  end
+  
 
   def create_sample_view
     sample_en = "The quick brown fox jumps over the lazy dog?!"
