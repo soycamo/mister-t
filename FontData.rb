@@ -70,15 +70,28 @@ end
 
 class TagClass
   
-  def initialize
+  attr_accessor :f
+  
+  def initialize(fonts)
+    @f = fonts
   end
   
-  def allthese(f)
+  def allthese
     ary = []
-    f.each do |x|
+    @f.each do |x|
       ary << x["tags"]
     end
     ary.flatten!.uniq!.sort!
+  end
+  
+  def fonts_from_tag(t)
+    ary = []
+    @f.each do |x|
+      if x["tags"].include?(t)
+        ary << x["name"]
+      end
+    end
+    ary.sort!
   end
   
 end

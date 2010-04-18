@@ -9,8 +9,8 @@ YAML_FILE = File.expand_path('~/mister-t.yml')
 
 class Controller
 
-  attr_writer :fontListView, :fontSampleView, :tokenView, :tagDataSource
-  attr_accessor :fonts
+  attr_writer :fontListView, :fontSampleView, :tokenView
+  attr_accessor :fonts, :tags
   
   def awakeFromNib
 
@@ -42,9 +42,8 @@ class Controller
     else
       create_font_list
     end
-    p TagClass.new.allthese(@fonts)
     sample_view
-    
+    @tags = TagClass.new(@fonts)
   end
   
   def numberOfRowsInTableView(view)
@@ -60,6 +59,17 @@ class Controller
     show_tags @fonts[@fontListView.selectedRow]["tags"]
   end
   
+  def tag_cloud(sender)
+    p @tags.allthese
+  end
+  
+  def tag_list(sender)
+    # p @tags.fonts_from_tag("zine")
+    @tags.allthese.each do |t|
+      p @tags.fonts_from_tag(t)
+    end
+  end
+  
 #  def fontSetChanged(notification)
 #    @fontListView.reloadData
 #  end
@@ -67,15 +77,6 @@ class Controller
 ######
 # Tags
 ######
-
-  def display_all_tags
-    ary = []
-    p @fonts.length
-    @fonts.each do |x|
-      ary << x["tags"]
-    end
-    p ary.flatten!.uniq!.sort!
-  end
 
   def textDidEndEditing(notification)
     save_tags
