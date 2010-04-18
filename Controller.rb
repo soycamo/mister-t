@@ -12,10 +12,7 @@ class Controller
   
   def awakeFromNib
 
-    retrieve_fonts
-    
-    create_sample_view
-    show_tags @fonts[@fontListView.selectedRow]["tags"]
+    retrieve_font_data
     
     ncenter = NSNotificationCenter.defaultCenter
     ncenter.addObserver self,
@@ -27,37 +24,20 @@ class Controller
       name:NSTextDidEndEditingNotification,
       object: nil
     
-  end
-  
-  def yaml_file
-    yaml_file = File.expand_path('~/mister-t.yml')
-    unless File.exist?(yaml_file)
-      File.open(yaml_file, 'w+'){|f| f << @fonts.to_yaml}
-    end
-    yaml_file
-  end
-  
-  def retrieve_fonts
-    @fonts = YAML.load_file(yaml_file) || []
-    if @fonts == []
-      createFontList
-    end
     @fontListView.setDataSource self
     @fontListView.reloadData
     @fontListView.selectRowIndexes(NSIndexSet.indexSetWithIndex(0), byExtendingSelection:false) 
+    
   end
-  
-  
-  def createFontList
-    all_fonts = NSFontManager.new.availableFontFamilies.sort
-    all_fonts.each do |f|
-      font_dict = {}
-      font = FontData.new(f)
-      font_dict["name"] = f
-      font_dict["tags"] = font.tags
-      @fonts << font_dict
+
+  def retrieve_font_data
+    camel = File.expand_path('~/test.yml')
+    if File.exist?(camel)
+      @fonts = YAML.load_file('/Users/camo/test.yml')
+    else
+      create_font_list
     end
-    @fontListView.reloadData
+    sample_view
   end
   
 #  def fontSetChanged(notification)
@@ -73,7 +53,7 @@ class Controller
   end
   
   def tableViewSelectionDidChange(notification)
-    create_sample_view
+    sample_view
     show_tags @fonts[@fontListView.selectedRow]["tags"]
   end
   
@@ -99,19 +79,35 @@ class Controller
 
   private
   
+  def save
+    File.open('/Users/camo/test.yml', 'w+') {|f| f << @fonts.to_yaml}
+  end
+  
   def clear_tags
     @tokenView.setStringValue ''
-    @fonts[@fontListView.selectedRow]["tags"] = ''
-    File.open(yaml_file, 'w'){|f| f << @fonts.to_yaml}
+    @fonts[@fontListView.selectedRow]["tags"] = []
+    save
   end
   
   def save_tags
     @fonts[@fontListView.selectedRow]["tags"] = @tokenView.stringValue.split(', ')
-    File.open(yaml_file, 'w'){|f| f << @fonts.to_yaml}
+    save
   end
   
-
-  def create_sample_view
+  def create_font_list
+    @fonts = []
+    all_fonts = NSFontManager.new.availableFontFamilies.sort
+    all_fonts.each do |f|
+      font_dict = {}
+      font = FontData.new(f)
+      font_dict["name"] = f
+      font_dict["tags"] = font.tags
+      @fonts << font_dict
+    end
+    save
+  end
+  
+  def sample_view
     sample_en = "The quick brown fox jumps over the lazy dog?!"
     sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
     fontname = @fonts[@fontListView.selectedRow]["name"]
