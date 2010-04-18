@@ -5,9 +5,11 @@
 
 require 'yaml'
 
+YAML_FILE = File.expand_path('~/mister-t.yml')
+
 class Controller
 
-  attr_writer :fontListView, :fontSampleView, :tokenView
+  attr_writer :fontListView, :fontSampleView, :tokenView, :tagDataSource
   attr_accessor :fonts
   
   def awakeFromNib
@@ -30,19 +32,20 @@ class Controller
     
   end
 
+############
+# Table View
+############
+
   def retrieve_font_data
-    camel = File.expand_path('~/test.yml')
-    if File.exist?(camel)
-      @fonts = YAML.load_file('/Users/camo/test.yml')
+    if File.exist?(YAML_FILE)
+      @fonts = YAML.load_file(YAML_FILE)
     else
       create_font_list
     end
+    p TagClass.new.allthese(@fonts)
     sample_view
+    
   end
-  
-#  def fontSetChanged(notification)
-#    @fontListView.reloadData
-#  end
   
   def numberOfRowsInTableView(view)
     @fonts ? @fonts.size : 0
@@ -57,6 +60,23 @@ class Controller
     show_tags @fonts[@fontListView.selectedRow]["tags"]
   end
   
+#  def fontSetChanged(notification)
+#    @fontListView.reloadData
+#  end
+
+######
+# Tags
+######
+
+  def display_all_tags
+    ary = []
+    p @fonts.length
+    @fonts.each do |x|
+      ary << x["tags"]
+    end
+    p ary.flatten!.uniq!.sort!
+  end
+
   def textDidEndEditing(notification)
     save_tags
   end
@@ -80,7 +100,7 @@ class Controller
   private
   
   def save
-    File.open('/Users/camo/test.yml', 'w+') {|f| f << @fonts.to_yaml}
+    File.open(YAML_FILE, 'w+') {|f| f << @fonts.to_yaml}
   end
   
   def clear_tags
@@ -99,7 +119,7 @@ class Controller
     all_fonts = NSFontManager.new.availableFontFamilies.sort
     all_fonts.each do |f|
       font_dict = {}
-      font = FontData.new(f)
+      font = Font.new(f)
       font_dict["name"] = f
       font_dict["tags"] = font.tags
       @fonts << font_dict
