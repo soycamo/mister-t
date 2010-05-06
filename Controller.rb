@@ -4,7 +4,6 @@
 # Created by Cameron Adamez on 3/18/10.
 
 require 'yaml'
-
 YAML_FILE = File.expand_path('~/mister-t.yml')
 
 class Controller
@@ -29,7 +28,7 @@ class Controller
     @fontListView.setDataSource self
     @fontListView.reloadData
     @fontListView.selectRowIndexes(NSIndexSet.indexSetWithIndex(0), byExtendingSelection:false) 
-    
+
   end
 
 ############
@@ -42,8 +41,6 @@ class Controller
     else
       create_font_list
     end
-    sample_view
-    @tags = TagClass.new(@fonts)
   end
   
   def numberOfRowsInTableView(view)
@@ -51,7 +48,14 @@ class Controller
   end
   
   def tableView(view, objectValueForTableColumn:column, row:index)
-    @fonts[index]["name"]
+    case column.identifier
+      when 'tags'
+         # tags
+      when 'name'
+         @fonts[index]["name"]
+      when 'variants'
+        # variants here
+    end
   end
   
   def tableViewSelectionDidChange(notification)
@@ -59,18 +63,8 @@ class Controller
     show_tags @fonts[@fontListView.selectedRow]["tags"]
   end
   
-  def tag_cloud(sender)
-    p @tags.allthese
-  end
-  
-  def tag_list(sender)
-    # p @tags.fonts_from_tag("zine")
-    @tags.allthese.each do |t|
-      p @tags.fonts_from_tag(t)
-    end
-  end
-  
 #  def fontSetChanged(notification)
+#    create_font_list
 #    @fontListView.reloadData
 #  end
 
@@ -83,7 +77,7 @@ class Controller
   end
   
   def show_tags(tags)
-    unless tags === ''
+    unless tags === '' || tags == nil
       @tokenView.setStringValue tags.join(', ')
     else
       @tokenView.setStringValue ''
@@ -97,7 +91,13 @@ class Controller
   def clearTag(sender)
     clear_tags
   end
-
+  
+  def tag_cloud(sender)
+  end
+  
+  def tag_list(sender)
+  end
+  
   private
   
   def save
@@ -119,21 +119,58 @@ class Controller
     @fonts = []
     all_fonts = NSFontManager.new.availableFontFamilies.sort
     all_fonts.each do |f|
-      font_dict = {}
-      font = Font.new(f)
-      font_dict["name"] = f
-      font_dict["tags"] = font.tags
-      @fonts << font_dict
+      @fonts << Font.new(f).to_dict
     end
     save
   end
   
   def sample_view
-    sample_en = "The quick brown fox jumps over the lazy dog?!"
-    sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
+    sample_hash = {
+    'en' => "The quick brown fox jumps over the lazy dog?!",
+    'ja' => "足が早い茶色のキツネがぐうたら犬を飛び越える。",
+    'ko' => "키스의 고유조건은 입술끼리 만나야 하고 특별한 기술은 필요치 않다.",
+    'th' => "นายสังฆภัณฑ์ เฮงพิทักษ์ฝั่ง ผู้เฒ่าซึ่งมีอาชีพเป็นฅนขายฃวด ถูกตำรวจปฏิบัติการจับฟ้องศาล ฐานลักนาฬิกาคุณหญิงฉัตรชฎา ฌานสมาธิ",
+    'zh_CN' => "視野無限廣，窗外有藍天",
+    'zh_TW' => "視野無限廣，窗外有藍天",
+    'ar' => "نص حكيم له سر قاطع وذو شأن عظيم مكتوب على ثوب أخضر ومغلف بجلد أزرق",
+    'hi' => "त्वरित आलसी कुत्ते पर भूरे लोमड़ी कूदता",
+    'gu' => "સમજણ પટતી નથી",
+    'ro' => "Широкая электрификация южных губерний даст мощный толчок подъёму сельского хозяйства.",
+    'he' => "כך התרסק נפץ על גוזל קטן, שדחף את צבי למים",
+    'el' => "Γαζίες καὶ μυρτιὲς δὲν θὰ βρῶ πιὰ στὸ χρυσαφὶ ξέφωτο"
+    }
     fontname = @fonts[@fontListView.selectedRow]["name"]
+    encod = @fonts[@fontListView.selectedRow]["encod"]
+    
+    # Pretend that this is a case statement. I can't figure out how to get a case statement to work. :(
+    if encod.include? "Japanese"
+      lang = 'ja'
+    elsif encod.include? "Korean"
+      lang = 'ko'
+    elsif encod.include? "Thai"
+      lang = 'th'
+    elsif encod.include? "Simplified Chinese"
+      lang = 'zh_CN'
+    elsif encod.include? "Traditional Chinese"
+      lang = 'zh_TW'
+    elsif encod.include? "Arabic"
+      lang = 'ar'
+    elsif encod.include? "Devangari"
+      lang = 'hi'
+    elsif encod.include? "Gujarati"
+      lang = 'gu'
+    elsif encod.include? "Cyrillic" # TODO adjust to country locale
+      lang = 'ro'
+    elsif encod.include? "Greek"
+      lang = 'el'
+    elsif encod.include? "Hebrew"
+      lang = 'he'
+    else
+      lang = 'en'
+    end
+
     @fontSampleView.setFont NSFont.fontWithName(fontname, size:24)
-    @fontSampleView.setStringValue sample_en
+    @fontSampleView.setStringValue sample_hash[lang]
   end
 
 end

@@ -1,8 +1,54 @@
 # FontData.rb
 # mister t
-#
-# Created by Cameron Adamez on 3/21/10.
-# Copyright 2010 __MyCompanyName__. All rights reserved.
+
+require 'taggable'
+
+class Font
+  include Taggable
+
+  attr_reader :name, :gly, :encod
+
+  def initialize(font_name)
+    @name = font_name
+    font = NSFont.fontWithName(font_name, size:12)
+    @gly = font.numberOfGlyphs.to_i
+    @encod = String.localizedNameOfStringEncoding font.mostCompatibleStringEncoding # Not very rubylike.
+    
+    add_tag "monospace" if font.isFixedPitch
+  end
+  
+  def variants # Array with variant name, displayed style, weight, and who knows what the last number is.
+    NSFontManager.new.availableMembersOfFontFamily(self.name)
+  end
+  
+  def has_bold?
+    if self.variants.rassoc("Bold")
+      self.variants.rassoc("Bold")[0]
+    else 
+      false
+    end
+  end
+  
+  def has_italic?
+    if self.variants.rassoc("Italic")
+      self.variants.rassoc("Italic")[0]
+    else 
+      false
+    end
+  end
+
+  def to_dict
+    dict = {}
+    dict["name"] = self.name
+    dict["encod"] = self.encod
+    dict["gly"] = self.gly
+    dict["tags"] = self.tags
+    dict
+  end
+
+end
+
+
 
 =begin
       theDict["gly"] = font.numberOfGlyphs
@@ -23,75 +69,3 @@
       theDict["AdvWidth"] = font.maximumAdvancement.width
       theDict["AdvHeight"] = font.maximumAdvancement.height
 =end
-
-
-class Font
-
-  attr_accessor :name, :gly, :tags
-
-  def initialize(font_name)
-    @name = font_name
-    font = NSFont.fontWithName(font_name, size:12)
-    #if font.displayName
-    #    @name = font.displayName
-    #  else
-    #    @name = font.fontName
-    #  end
-    @gly = font.numberOfGlyphs.to_i
-
-    # Autotagging
-    #mono = font.isFixedPitch ? "monospaced" : nil
-    
-    @tags = []
-    
-  end
-  
-  def variants # Array with variant name, displayed style, weight, and who knows what the last number is.
-    NSFontManager.new.availableMembersOfFontFamily(self.name)
-  end
-  
-  def bold # returns 
-    if self.variants.rassoc("Bold")
-      self.variants.rassoc("Bold")[0]
-    else 
-      false
-    end
-  end
-  
-  def italic
-    if self.variants.rassoc("Italic")
-      self.variants.rassoc("Italic")[0]
-    else 
-      false
-    end
-  end
-  
-end
-
-class TagClass
-  
-  attr_accessor :f
-  
-  def initialize(fonts)
-    @f = fonts
-  end
-  
-  def allthese
-    ary = []
-    @f.each do |x|
-      ary << x["tags"]
-    end
-    ary.flatten!.uniq!.sort!
-  end
-  
-  def fonts_from_tag(t)
-    ary = []
-    @f.each do |x|
-      if x["tags"].include?(t)
-        ary << x["name"]
-      end
-    end
-    ary.sort!
-  end
-  
-end
