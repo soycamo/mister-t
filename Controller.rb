@@ -4,6 +4,7 @@
 # Created by Cameron Adamez on 3/18/10.
 
 require 'yaml'
+require 'SampleController'
 
 class Controller
 
@@ -37,7 +38,7 @@ class Controller
     else
       create_font_list
     end
-    sample_view
+    #sample_view
   end
   
 #  def fontSetChanged(notification)
@@ -53,7 +54,7 @@ class Controller
   end
   
   def tableViewSelectionDidChange(notification)
-    sample_view
+	sample_view
     show_tags @fonts[@fontListView.selectedRow]["tags"]
   end
   
@@ -63,9 +64,9 @@ class Controller
   
   def show_tags(tags)
     unless tags === ''
-      @tokenView.setStringValue tags.join(', ')
+      @tokenView.objectValue = tags.join(', ')
     else
-      @tokenView.setStringValue ''
+      @tokenView.objectValue = []
     end
   end
   
@@ -94,6 +95,14 @@ class Controller
     save
   end
   
+  def sample_view
+    sample_en = "The quick brown fox jumps over the lazy dog?!"
+    sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
+    fontname = @fonts[@fontListView.selectedRow]["name"]
+    @fontSampleView.setFont NSFont.fontWithName(fontname, size:24)
+    @fontSampleView.setStringValue sample_en
+  end
+  
   def create_font_list
     @fonts = []
     all_fonts = NSFontManager.new.availableFontFamilies.sort
@@ -105,14 +114,6 @@ class Controller
       @fonts << font_dict
     end
     save
-  end
-  
-  def sample_view
-    sample_en = "The quick brown fox jumps over the lazy dog?!"
-    sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
-    fontname = @fonts[@fontListView.selectedRow]["name"]
-    @fontSampleView.setFont NSFont.fontWithName(fontname, size:24)
-    @fontSampleView.setStringValue sample_en
   end
 
 end
