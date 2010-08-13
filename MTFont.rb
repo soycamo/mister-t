@@ -5,6 +5,7 @@
 # Copyright 2010 __MyCompanyName__. All rights reserved.
 
 require 'taggable'
+require 'enumerator'
 
 class MTFont
 
@@ -19,11 +20,10 @@ class MTFont
 	def initialize(font_name)
 		font = NSFont.fontWithName(font_name, size:12)
 		@name = font_name
-    #@tags = []
 	end
 	
 	def variants
-		NSFontManager.new.availableMembersOfFontFamily @fonts[@font_table_view.selectedRow]
+		NSFontManager.new.availableMembersOfFontFamily @name
 	end
 
 	def is_monospace?
@@ -34,8 +34,16 @@ end
 
 class MTFonts
 
+	include Enumerable
+	
+	attr_reader :fontlist
+	
 	def initialize
-		NSFontManager.new.availableFontFamilies.sort	
+		@fontlist = NSFontManager.new.availableFontFamilies.sort	
+	end
+	
+	def each
+		@fontlist.each { |f| yield f }
 	end
 
 end

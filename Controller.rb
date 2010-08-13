@@ -4,11 +4,12 @@
 # Created by Cameron Adamez on 3/18/10.
 
 require 'yaml'
-require 'SampleController'
+
+FONT_DATA = File.expand_path('~/test.yml')
 
 class Controller
 
-  attr_writer :fontListView, :fontSampleView, :tokenView
+  attr_writer :fontListView, :fontSampleView, :tokenView, :variantComboBox
   attr_accessor :fonts
   
   def awakeFromNib
@@ -25,20 +26,21 @@ class Controller
       name:NSTextDidEndEditingNotification,
       object: nil
     
-    @fontListView.setDataSource self
+	@variantComboBox.usesDataSource = true
+	@variantComboBox.dataSource = self
+	@variantComboBox.selectItemAtIndex 0
+	@fontListView.dataSource = self
     @fontListView.reloadData
     @fontListView.selectRowIndexes(NSIndexSet.indexSetWithIndex(0), byExtendingSelection:false) 
     
   end
 
   def retrieve_font_data
-    camel = File.expand_path('~/test.yml')
-    if File.exist?(camel)
-      @fonts = YAML.load_file('/Users/camo/test.yml')
+    if File.exist?(FONT_DATA)
+      @fonts = YAML.load_file(FONT_DATA)
     else
       create_font_list
     end
-    #sample_view
   end
   
 #  def fontSetChanged(notification)
@@ -50,68 +52,82 @@ class Controller
   end
   
   def tableView(view, objectValueForTableColumn:column, row:index)
-    @fonts[index]["name"]
+    @fonts[index].name
   end
   
   def tableViewSelectionDidChange(notification)
 	sample_view
-    show_tags @fonts[@fontListView.selectedRow]["tags"]
+    @tokenView.objectValue = @fonts[@fontListView.selectedRow].tags
   end
   
   def textDidEndEditing(notification)
-    save_tags
+	@fonts[@fontListView.selectedRow].add_tags @tokenView.objectValue 
+    save
   end
   
-  def show_tags(tags)
-    unless tags === ''
-      @tokenView.objectValue = tags.join(', ')
-    else
-      @tokenView.objectValue = []
-    end
-  end
+  
+  #def show_tags(tags)
+  #  unless tags === '' || nil
+  #    #@tokenView.objectValue = tags.join(', ')
+#	  @tokenView.objectValue = tags
+ #   else
+  #    @tokenView.objectValue = []
+  #  end
+  #end
   
   def addTag(sender)
-    save_tags
+    save
   end
   
   def clearTag(sender)
-    clear_tags
+    @fonts[@fontListView.selectedRow].clear_tags
+	save
   end
 
+	def numberOfItemsInComboBox(comboBox)
+		@fonts[@fontListView.selectedRow].variants.length
+	end
+
+	def comboBox(cbox, objectValueForItemAtIndex:index)
+		@fonts[@fontListView.selectedRow].variants[index][1]
+	end
+
+	#def comboBox(cbox, indexOfItemWithStringValue:str)
+	#	@fonts[@fontListView.selectedRow].variants.indexOfObject(str)
+	#end
+
+	#def comboBox(cbox, completedString:str)
+		# This method is received after each character typed by the user,
+		# because we have checked the "completes" flag for genreComboBox in IB.
+		# Given the inputString the user has typed, see if we can find a genre with the prefix,
+		# and return it as the suggested complete string.
+
+    # NSString *candidate = [self firstGenreMatchingPrefix:inputString];
+	
+
+    # return (candidate ? candidate : inputString);
+
+	#end 
+	
   private
   
   def save
     File.open('/Users/camo/test.yml', 'w+') {|f| f << @fonts.to_yaml}
   end
   
-  def clear_tags
-    @tokenView.setStringValue ''
-    @fonts[@fontListView.selectedRow]["tags"] = []
-    save
-  end
-  
-  def save_tags
-    @fonts[@fontListView.selectedRow]["tags"] = @tokenView.stringValue.split(', ')
-    save
-  end
-  
   def sample_view
     sample_en = "The quick brown fox jumps over the lazy dog?!"
     sample_ja = "足が早い茶色のキツネがぐうたら犬を飛び越える。"
-    fontname = @fonts[@fontListView.selectedRow]["name"]
-    @fontSampleView.setFont NSFont.fontWithName(fontname, size:24)
-    @fontSampleView.setStringValue sample_en
+    fontname = @fonts[@fontListView.selectedRow].name
+    @fontSampleView.font = NSFont.fontWithName(fontname, size:24)
+    @fontSampleView.stringValue = sample_en
   end
   
   def create_font_list
+	#This should just return a freaking array of objects, not this whole other BS!
     @fonts = []
-    all_fonts = NSFontManager.new.availableFontFamilies.sort
-    all_fonts.each do |f|
-      font_dict = {}
-      font = FontData.new(f)
-      font_dict["name"] = f
-      font_dict["tags"] = font.tags
-      @fonts << font_dict
+    MTFonts.new.each do |f|
+      @fonts << MTFont.new(f)
     end
     save
   end
